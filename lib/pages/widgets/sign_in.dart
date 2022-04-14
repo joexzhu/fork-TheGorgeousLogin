@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_gorgeous_login/httpHelper/HttpService.dart';
 import 'package:the_gorgeous_login/theme.dart';
 import 'package:the_gorgeous_login/widgets/snackbar.dart';
 
@@ -160,8 +163,19 @@ class _SignInState extends State<SignIn> {
                           fontFamily: 'WorkSansBold'),
                     ),
                   ),
-                  onPressed: () => CustomSnackBar(
-                      context, const Text('Login button pressed')),
+                  onPressed: () async {
+                    HttpService httpService = HttpService();
+                    final dynamic result = await httpService.post(
+                        'http://localhost:8880/monitor/auth',
+                        body: <String, String>{
+                          'username': loginEmailController.text,
+                          'password': loginPasswordController.text
+                        });
+                    CustomSnackBar(
+                        context,
+                        Text(result
+                            .toString()) /* const Text('Login button pressed') */);
+                  },
                 ),
               )
             ],
